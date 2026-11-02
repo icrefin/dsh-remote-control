@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/icrefin/dsh-remote-control/security/advisories/new
+    about: Report a vulnerability privately. Never open a public issue for security.
+  - name: Contributing guide
+    url: https://github.com/icrefin/dsh-remote-control/blob/main/.github/CONTRIBUTING.md
+    about: Read how to set up the project and submit a pull request.

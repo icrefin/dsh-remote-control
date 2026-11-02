@@ -1,0 +1,30 @@
+[Unit]
+Description=DSH remote control relay
+Documentation=file:__PREFIX__/PROTOCOL.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# A network daemon should not be a login user. Create the account first:
+#   sudo useradd --system --home-dir __PREFIX__ --shell /usr/sbin/nologin __USER__
+User=__USER__
+WorkingDirectory=__PREFIX__
+EnvironmentFile=-__ENV__
+Environment=NODE_ENV=production
+ExecStart=__NODE__ __PREFIX__/server.mjs
+Restart=always
+RestartSec=3
+# Binding a privileged port as a non-root user needs exactly this capability.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=__PREFIX__
+# The session table holds host secrets; keep it owner-only.
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

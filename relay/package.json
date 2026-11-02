@@ -1,0 +1,17 @@
+{
+  "name": "dsh-remote-relay",
+  "version": "0.9.3",
+  "private": true,
+  "description": "Self-hosted relay that proxies a browser to a DSH host running the real Harness client",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

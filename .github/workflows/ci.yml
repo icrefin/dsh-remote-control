@@ -1,0 +1,61 @@
+# Continuous integration for dsh-remote-control.
+#
+# Mirrors what `pnpm check` does locally — typecheck both halves against the real
+# dsh client slots, build the bundle, then run the behavioural suite — so a green
+# badge means the same thing here as on a contributor's machine.
+#
+# The peer dependencies (@deepseek-ai/*) are published on npm, so a clean
+# checkout really does install. `pnpm/action-setup` reads `packageManager` from
+# package.json, which is why no version is repeated here.
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+# Read-only: this workflow never writes to the repository.
+permissions:
+  contents: read
+
+# One run per branch/PR; a new push cancels the in-progress run instead of queueing it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: "1"
+
+jobs:
+  check:
+    name: typecheck · build · test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Version comes from package.json "packageManager".
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          # package.json declares "node": ">=22.17.0"; 22 is the current LTS line.
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck both halves
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build the bundle
+        run: pnpm build

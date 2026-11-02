@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151517" media="(prefers-color-scheme: dark)" />
+    <title>DeepSeek Harness — remote</title>
+    <link rel="stylesheet" href="./pair.css" />
+  </head>
+  <body>
+    <main class="card">
+      <div class="wordmark">DEEPSEEK <span>HARNESS</span></div>
+
+      <!-- 1. Waiting for a link: the state a bare visit lands in. -->
+      <section id="step-link" hidden>
+        <h1>Pair this browser</h1>
+        <p class="notice" id="link-notice" hidden></p>
+        <p class="hint">
+          Open the remote-control panel on the machine running the Harness and scan
+          its QR code, or paste the link it shows.
+        </p>
+        <form id="link-form" autocomplete="off">
+          <input
+            id="link-input"
+            type="text"
+            inputmode="url"
+            spellcheck="false"
+            autocapitalize="off"
+            placeholder="http://…/#/pair?t=…"
+            aria-label="Pairing link"
+          />
+          <button type="submit">Pair</button>
+        </form>
+      </section>
+
+      <!-- 2. Working: shown while the token is exchanged. -->
+      <section id="step-working" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <h1>Pairing…</h1>
+        <p class="hint" id="working-hint">Asking the host to let this browser in.</p>
+      </section>
+
+      <!-- 3. Failure: the token was wrong, expired, or already used. -->
+      <section id="step-error" hidden>
+        <h1>That link did not work</h1>
+        <p class="hint" id="error-text"></p>
+        <button id="retry" type="button" class="ghost">Try another link</button>
+      </section>
+
+      <!-- 4. Paired but offline: the host is not attached. -->
+      <section id="step-offline" hidden>
+        <h1>Paired — the host is offline</h1>
+        <p class="hint" id="offline-hint">
+          This browser is remembered. Start the Harness on that machine, or wait —
+          this page retries by itself.
+        </p>
+        <button id="offline-retry" type="button" class="ghost">Pair another link</button>
+      </section>
+    </main>
+
+    <p class="footer">
+      The remote browser runs the real Harness client. Traffic is relayed through
+      <span id="relay-host">this server</span>.
+    </p>
+
+    <script type="module" src="./pair.js"></script>
+  </body>
+</html>

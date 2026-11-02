@@ -54,8 +54,10 @@ jobs:
       - name: Typecheck both halves
         run: pnpm typecheck
 
-      - name: Test
-        run: pnpm test
-
+      # Build before testing: the bundle specs assert on lib/client.js, so a
+      # clean checkout without a build would only be able to skip them.
       - name: Build the bundle
         run: pnpm build
+
+      - name: Test
+        run: pnpm test
